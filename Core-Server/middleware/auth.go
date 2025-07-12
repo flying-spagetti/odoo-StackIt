@@ -25,7 +25,11 @@ func JWTAuth() gin.HandlerFunc {
 		})
 
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-			userId := claims["userId"].(string)
+			userId, ok := claims["userId"].(string)
+			if !ok {
+				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token payload"})
+				return
+			}
 			c.Set("userId", userId)
 			c.Next()
 		} else {

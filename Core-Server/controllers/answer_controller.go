@@ -38,7 +38,9 @@ func PostAnswer(c *gin.Context) {
 		CreatedAt:  time.Now(),
 	}
 
-	_, err = config.DB.Collection("answers").InsertOne(c, answer)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	_, err = config.DB.Collection("answers").InsertOne(ctx, answer)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Failed to post answer"})
 		return
