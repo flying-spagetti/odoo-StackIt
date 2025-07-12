@@ -1,15 +1,18 @@
 package controllers
 
 import (
-	"context"
-	"net/http"
-	"time"
+    "context"
+    "net/http"
+    "time"
+    "strconv"
 
-	"Core-Server/config"
-	"Core-Server/models"
+    "core-server/config"
+    "core-server/models"
 
-	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+    "github.com/gin-gonic/gin"
+    "go.mongodb.org/mongo-driver/bson"
+    "go.mongodb.org/mongo-driver/mongo/options"
+    "go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func CreateQuestion(c *gin.Context) {
@@ -51,4 +54,49 @@ func CreateQuestion(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, gin.H{"message": "Question created", "id": result.InsertedID})
+}
+
+func int64Ptr(i int64) *int64 {
+    return &i
+}
+
+func GetQuestions(c *gin.Context) {
+	pageStr := c.DefaultQuery("page", "1")
+	limitStr := c.DefaultQuery("limit", "10")
+	tag := c.Query("tag")
+	search := c.Query("search")
+
+	page, _ := strconv.Atoi(pageStr)
+	limit, _ := strconv.Atoi(limitStr)
+	skip := (page - 1) * limit
+
+	filter := bson.M{}
+	if tag != "" {
+		filter["tags"] = tag
+	}
+	if search != "" {
+		filter["title"] = bson.M{"$regex": search, "$options": "i"}
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	cur, err := config.DB.Collection("questions").Find(ctx, filter, &options.FindOptions{
+		Limit: int64Ptr(int64(limit)),
+		Skip:  int64Ptr(int64(skip)),
+		Sort:  bson.D{{"createdAt", -1}},
+	})
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Error fetching questions"})
+		return
+	}
+	defer cur.Close(ctx)
+
+	var questions []models.Question
+	if err := cur.All(ctx, &questions); err != nil {
+		c.JSON(500, gin.H{"error": "Error parsing questions"})
+		return
+	}
+
+	c.JSON(200, questions)
 }

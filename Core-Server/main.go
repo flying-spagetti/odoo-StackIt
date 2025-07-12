@@ -40,7 +40,7 @@ func main() {
 		c.HandlerFunc(ctx.Writer, ctx.Request)
 		ctx.Next()
 	})
-	routes.RegisterQuestionRoutes(r)
+	
 
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
@@ -58,6 +58,12 @@ func main() {
 			})
 		})
 	}
+	// Register routes
+	routes.RegisterAuthRoutes(r)
+	routes.RegisterAnswerRoutes(r)
+	routes.RegisterQuestionRoutes(r)
+	
+
 
 	port := os.Getenv("PORT")
 	if port == "" {
