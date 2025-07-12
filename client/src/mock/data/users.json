@@ -1,0 +1,58 @@
+[
+  {
+    "userId": "user_1",
+    "email": "john.doe@example.com",
+    "name": "John Doe",
+    "role": "user",
+    "password": "password123",
+    "createdAt": "2024-01-10T10:00:00Z",
+    "stats": {
+      "questionsAsked": 5,
+      "questionsApproved": 3,
+      "questionsRejected": 2,
+      "answersGiven": 12
+    }
+  },
+  {
+    "userId": "user_2",
+    "email": "jane.smith@example.com",
+    "name": "Jane Smith",
+    "role": "user",
+    "password": "password123",
+    "createdAt": "2024-01-08T14:30:00Z",
+    "stats": {
+      "questionsAsked": 8,
+      "questionsApproved": 6,
+      "questionsRejected": 2,
+      "answersGiven": 25
+    }
+  },
+  {
+    "userId": "admin_1",
+    "email": "admin@devforum.com",
+    "name": "Admin User",
+    "role": "admin",
+    "password": "admin123",
+    "createdAt": "2024-01-01T00:00:00Z",
+    "stats": {
+      "questionsAsked": 2,
+      "questionsApproved": 2,
+      "questionsRejected": 0,
+      "answersGiven": 45
+    }
+  },
+  {
+    "userId": "user_3",
+    "email": "mike.wilson@example.com",
+    "name": "Mike Wilson",
+    "role": "user",
+    "password": "password123",
+    "createdAt": "2024-01-12T09:15:00Z",
+    "stats": {
+      "questionsAsked": 3,
+      "questionsApproved": 1,
+      "questionsRejected": 1,
+      "answersGiven": 8
+    }
+  }
+]

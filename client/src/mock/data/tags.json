@@ -1,0 +1,72 @@
+[
+  {
+    "id": "tag_1",
+    "name": "golang",
+    "description": "Questions related to Go programming language",
+    "questionCount": 15,
+    "color": "#00ADD8"
+  },
+  {
+    "id": "tag_2",
+    "name": "javascript",
+    "description": "Questions about JavaScript programming",
+    "questionCount": 28,
+    "color": "#F7DF1E"
+  },
+  {
+    "id": "tag_3",
+    "name": "react",
+    "description": "React.js library questions",
+    "questionCount": 22,
+    "color": "#61DAFB"
+  },
+  {
+    "id": "tag_4",
+    "name": "nextjs",
+    "description": "Next.js framework questions",
+    "questionCount": 18,
+    "color": "#000000"
+  },
+  {
+    "id": "tag_5",
+    "name": "mongodb",
+    "description": "MongoDB database questions",
+    "questionCount": 12,
+    "color": "#47A248"
+  },
+  {
+    "id": "tag_6",
+    "name": "python",
+    "description": "Python programming language",
+    "questionCount": 25,
+    "color": "#3776AB"
+  },
+  {
+    "id": "tag_7",
+    "name": "fastapi",
+    "description": "FastAPI framework questions",
+    "questionCount": 8,
+    "color": "#009688"
+  },
+  {
+    "id": "tag_8",
+    "name": "docker",
+    "description": "Docker containerization questions",
+    "questionCount": 14,
+    "color": "#2496ED"
+  },
+  {
+    "id": "tag_9",
+    "name": "authentication",
+    "description": "Authentication and security questions",
+    "questionCount": 19,
+    "color": "#FF6B6B"
+  },
+  {
+    "id": "tag_10",
+    "name": "database",
+    "description": "General database questions",
+    "questionCount": 31,
+    "color": "#4ECDC4"
+  }
+]

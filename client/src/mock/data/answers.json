@@ -1,0 +1,46 @@
+[
+  {
+    "id": "a_1",
+    "content": "For JWT authentication in Go, I recommend using the `golang-jwt/jwt` library. Here's a complete implementation:\n\n```go\npackage main\n\nimport (\n    \"github.com/golang-jwt/jwt/v5\"\n    \"github.com/gin-gonic/gin\"\n)\n\nfunc generateToken(userID string) (string, error) {\n    token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{\n        \"user_id\": userID,\n        \"exp\":     time.Now().Add(time.Hour * 24).Unix(),\n    })\n    return token.SignedString([]byte(\"your-secret-key\"))\n}\n\nfunc authMiddleware() gin.HandlerFunc {\n    return func(c *gin.Context) {\n        tokenString := c.GetHeader(\"Authorization\")\n        // Validate token logic here\n    }\n}\n```\n\nThis approach gives you good security and flexibility.",
+    "authorId": "admin_1",
+    "authorName": "Admin User",
+    "questionId": "q_1",
+    "createdAt": "2024-01-15T12:30:00Z",
+    "updatedAt": "2024-01-15T12:30:00Z",
+    "votes": 5,
+    "isAccepted": true
+  },
+  {
+    "id": "a_2",
+    "content": "You can also use the `github.com/dgrijalva/jwt-go` library, but be aware it's deprecated. The `golang-jwt/jwt` mentioned above is the maintained fork.\n\nHere's an alternative middleware approach:\n\n```go\nfunc JWTMiddleware(secret string) gin.HandlerFunc {\n    return gin.HandlerFunc(func(c *gin.Context) {\n        token := c.Request.Header.Get(\"Authorization\")\n        if token == \"\" {\n            c.JSON(401, gin.H{\"error\": \"No token provided\"})\n            c.Abort()\n            return\n        }\n        // Token validation logic\n    })\n}\n```",
+    "authorId": "user_2",
+    "authorName": "Jane Smith",
+    "questionId": "q_1",
+    "createdAt": "2024-01-15T13:45:00Z",
+    "updatedAt": "2024-01-15T13:45:00Z",
+    "votes": 3,
+    "isAccepted": false
+  },
+  {
+    "id": "a_3",
+    "content": "Here's a complete MongoDB aggregation pipeline for your requirements:\n\n```javascript\ndb.collection.aggregate([\n  {\n    $match: {\n      createdAt: {\n        $gte: ISODate(\"2024-01-01\"),\n        $lte: ISODate(\"2024-12-31\")\n      }\n    }\n  },\n  {\n    $group: {\n      _id: \"$category\",\n      avgRating: { $avg: \"$rating\" },\n      totalViews: { $sum: \"$views\" },\n      count: { $sum: 1 }\n    }\n  },\n  {\n    $match: {\n      avgRating: { $gte: 3.0 }\n    }\n  },\n  {\n    $sort: { totalViews: -1 }\n  }\n])\n```\n\nThis pipeline handles all your requirements efficiently.",
+    "authorId": "admin_1",
+    "authorName": "Admin User",
+    "questionId": "q_2",
+    "createdAt": "2024-01-14T16:20:00Z",
+    "updatedAt": "2024-01-14T16:20:00Z",
+    "votes": 8,
+    "isAccepted": true
+  },
+  {
+    "id": "a_4",
+    "content": "For FastAPI with async SQLAlchemy, here's the proper setup:\n\n```python\nfrom sqlalchemy.ext.asyncio import AsyncSession, create_async_engine\nfrom sqlalchemy.orm import sessionmaker\n\nengine = create_async_engine(\n    \"postgresql+asyncpg://user:pass@localhost/db\",\n    echo=True\n)\n\nAsyncSessionLocal = sessionmaker(\n    engine, class_=AsyncSession, expire_on_commit=False\n)\n\nasync def get_db():\n    async with AsyncSessionLocal() as session:\n        yield session\n\n@app.get(\"/users/{user_id}\")\nasync def get_user(user_id: int, db: AsyncSession = Depends(get_db)):\n    result = await db.execute(select(User).where(User.id == user_id))\n    return result.scalar_one_or_none()\n```",
+    "authorId": "user_1",
+    "authorName": "John Doe",
+    "questionId": "q_5",
+    "createdAt": "2024-01-12T14:30:00Z",
+    "updatedAt": "2024-01-12T14:30:00Z",
+    "votes": 12,
+    "isAccepted": true
+  }
+]
