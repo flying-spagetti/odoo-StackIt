@@ -10,3 +10,4 @@ go.work
 vendor/
 tmp/
 *.log
+.env
