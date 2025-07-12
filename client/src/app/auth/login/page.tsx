@@ -14,7 +14,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import useAuthStore from "@/store/authStore";
+
+const API_BASE_URL = "http://localhost:8080/api/v1";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -22,7 +23,6 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login } = useAuthStore();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,14 +33,7 @@ export default function LoginPage() {
     try {
       console.log(email, password);
       await login({ email, password });
-      
-      // Redirect based on user role
-      const userRole = useAuthStore.getState().user?.role;
-      if (userRole === 'admin') {
-        router.push('/admin');
-      } else {
-        router.push('/dashboard');
-      }
+      router.push("/");
     } catch (err) {
       setError("Invalid email or password");
     } finally {
@@ -120,3 +113,20 @@ export default function LoginPage() {
     </div>
   );
 }
+async function login({ email, password }: { email: string; password: string; }) {
+  const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Login failed");
+  }
+
+  return response.json();
+}
+

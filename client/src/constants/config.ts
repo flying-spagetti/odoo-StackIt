@@ -1,5 +1,5 @@
 export const CONFIG = {
-  USE_MOCK_API: true, // Set to false when real API is ready
-  API_BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080',
-  MOCK_DELAY: 800, // Simulate network delay in ms
+  USE_MOCK_API: false, // Set to false to use real API
+  API_BASE_URL: 'http://localhost:8080/api/v1',
+  MOCK_DELAY: 800,
 } as const;

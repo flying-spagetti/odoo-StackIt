@@ -8,18 +8,20 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import MainLayout from '@/components/layout/MainLayout';
+
+const API_BASE_URL = "http://localhost:8080/api/v1";
 import useAuthStore from '@/store/authStore';
 
 export default function SignupPage() {
-  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
-  const { signup } = useAuthStore();
+
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,16 +37,26 @@ export default function SignupPage() {
     }
 
     try {
-      const response = await signup({ name, email, password });
-      
-      if (response.statusCode === 200 || response.statusCode === 201) {
-        setSuccess(response.message);
-        setTimeout(() => {
-          router.push('/auth/login');
-        }, 2000);
-      } else {
-        setError(response.message || 'Signup failed');
+      const res = await fetch(`${API_BASE_URL}/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || data.message || 'Signup failed');
+        setIsLoading(false);
+        return;
       }
+
+      setSuccess(data.message || 'Signup successful! Redirecting...');
+      setTimeout(() => {
+        router.push('/auth/login');
+      }, 2000);
     } catch (err) {
       setError('An error occurred during signup');
     } finally {
@@ -75,26 +87,27 @@ export default function SignupPage() {
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
-              
+
               {success && (
                 <Alert>
                   <AlertDescription>{success}</AlertDescription>
                 </Alert>
               )}
-              
+
               <div className="space-y-2">
-                <Label htmlFor="name">Full name</Label>
+
+                <Label htmlFor="username">Username</Label>
                 <Input
-                  id="name"
+                  id="username"
                   type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter your full name"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter your username"
                   required
                   className="h-11"
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="email">Email address</Label>
                 <Input
@@ -107,7 +120,7 @@ export default function SignupPage() {
                   className="h-11"
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
                 <Input
@@ -120,7 +133,7 @@ export default function SignupPage() {
                   className="h-11"
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="confirmPassword">Confirm password</Label>
                 <Input
@@ -133,22 +146,18 @@ export default function SignupPage() {
                   className="h-11"
                 />
               </div>
-              
-              <Button type="submit" className="w-full h-11" disabled={isLoading}>
-                {isLoading ? 'Creating account...' : 'Create account'}
+
+
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? 'Creating Account...' : 'Create Account'}
               </Button>
             </form>
-            
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
-                Already have an account?{" "}
-                <Link
-                  href="/auth/login"
-                  className="font-medium text-blue-600 hover:text-blue-500"
-                >
-                  Sign in
-                </Link>
-              </p>
+
+            <div className="mt-6 text-center text-sm">
+              <span className="text-muted-foreground">Already have an account? </span>
+              <Link href="/auth/login" className="text-primary hover:underline">
+                Sign in
+              </Link>
             </div>
           </CardContent>
         </Card>
