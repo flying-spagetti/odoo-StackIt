@@ -12,12 +12,17 @@ const useAuthStore = create<AuthState>()(
 
       login: async (credentials: LoginCredentials) => {
         try {
+          console.log('Login attempt with:', credentials);
           const response = await apiService.login(credentials);
+          console.log('Login response:', response);
+          
           set({ 
             user: response.user, 
             isAuthenticated: true,
             token: response.token 
           });
+          
+          console.log('Auth state after login:', get());
         } catch (error) {
           console.error('Login error:', error);
           throw error;
@@ -35,6 +40,7 @@ const useAuthStore = create<AuthState>()(
       },
 
       logout: () => {
+        console.log('Logging out');
         set({ user: null, isAuthenticated: false, token: null });
       },
 

@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import MainLayout from '@/components/layout/MainLayout';
 import useAuthStore from '@/store/authStore';
 
 export default function SignupPage() {
@@ -54,17 +53,23 @@ export default function SignupPage() {
   };
 
   return (
-    <MainLayout>
-      <div className="max-w-md mx-auto mt-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        {/* Logo/Brand */}
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900">DevForum</h1>
+          <p className="mt-2 text-sm text-gray-600">Create your account</p>
+        </div>
+
         <Card>
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Create Account</CardTitle>
+            <CardTitle className="text-2xl">Get started</CardTitle>
             <CardDescription>
-              Join our community and start asking questions
+              Create your account to join our community
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
               {error && (
                 <Alert variant="destructive">
                   <AlertDescription>{error}</AlertDescription>
@@ -78,7 +83,7 @@ export default function SignupPage() {
               )}
               
               <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
+                <Label htmlFor="name">Full name</Label>
                 <Input
                   id="name"
                   type="text"
@@ -86,11 +91,12 @@ export default function SignupPage() {
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Enter your full name"
                   required
+                  className="h-11"
                 />
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Email address</Label>
                 <Input
                   id="email"
                   type="email"
@@ -98,6 +104,7 @@ export default function SignupPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   required
+                  className="h-11"
                 />
               </div>
               
@@ -110,11 +117,12 @@ export default function SignupPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Create a password"
                   required
+                  className="h-11"
                 />
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Label htmlFor="confirmPassword">Confirm password</Label>
                 <Input
                   id="confirmPassword"
                   type="password"
@@ -122,23 +130,29 @@ export default function SignupPage() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm your password"
                   required
+                  className="h-11"
                 />
               </div>
               
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Creating Account...' : 'Create Account'}
+              <Button type="submit" className="w-full h-11" disabled={isLoading}>
+                {isLoading ? 'Creating account...' : 'Create account'}
               </Button>
             </form>
             
-            <div className="mt-6 text-center text-sm">
-              <span className="text-muted-foreground">Already have an account? </span>
-              <Link href="/auth/login" className="text-primary hover:underline">
-                Sign in
-              </Link>
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600">
+                Already have an account?{" "}
+                <Link
+                  href="/auth/login"
+                  className="font-medium text-blue-600 hover:text-blue-500"
+                >
+                  Sign in
+                </Link>
+              </p>
             </div>
           </CardContent>
         </Card>
       </div>
-    </MainLayout>
+    </div>
   );
 }

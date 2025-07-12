@@ -6,6 +6,7 @@ import usersData from '../data/users.json';
 import questionsData from '../data/questions.json';
 import answersData from '../data/answers.json';
 import tagsData from '../data/tags.json';
+import notificationsData from '../data/notifications.json';
 
 // Simulate network delay
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -15,6 +16,7 @@ class MockApiService {
   private questions = questionsData;
   private answers = answersData;
   private tags = tagsData;
+  private notifications = notificationsData;
 
   async login(credentials: LoginCredentials) {
     await delay(CONFIG.MOCK_DELAY);
@@ -78,6 +80,79 @@ class MockApiService {
     };
   }
 
+  async getUserQuestions(userId: string, page = 1, limit = 10) {
+    await delay(CONFIG.MOCK_DELAY);
+    
+    const userQuestions = this.questions.filter(q => q.authorId === userId);
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const paginatedQuestions = userQuestions.slice(startIndex, endIndex);
+    
+    return {
+      questions: paginatedQuestions,
+      total: userQuestions.length,
+      page,
+      limit,
+      totalPages: Math.ceil(userQuestions.length / limit)
+    };
+  }
+
+  async getUserAnswers(userId: string, page = 1, limit = 10) {
+    await delay(CONFIG.MOCK_DELAY);
+    
+    const userAnswers = this.answers.filter(a => a.authorId === userId);
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const paginatedAnswers = userAnswers.slice(startIndex, endIndex);
+    
+    return {
+      answers: paginatedAnswers,
+      total: userAnswers.length,
+      page,
+      limit,
+      totalPages: Math.ceil(userAnswers.length / limit)
+    };
+  }
+
+  async getUserNotifications(userId: string, page = 1, limit = 10) {
+    await delay(CONFIG.MOCK_DELAY);
+    
+    const userNotifications = this.notifications
+      .filter(n => n.userId === userId)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const paginatedNotifications = userNotifications.slice(startIndex, endIndex);
+    
+    return {
+      notifications: paginatedNotifications,
+      total: userNotifications.length,
+      page,
+      limit,
+      totalPages: Math.ceil(userNotifications.length / limit)
+    };
+  }
+
+  async getUserStats(userId: string) {
+    await delay(CONFIG.MOCK_DELAY);
+    
+    const userQuestions = this.questions.filter(q => q.authorId === userId);
+    const userAnswers = this.answers.filter(a => a.authorId === userId);
+    
+    return {
+      questionsAsked: userQuestions.length,
+      questionsApproved: userQuestions.filter(q => q.status === 'approved').length,
+      questionsRejected: userQuestions.filter(q => q.status === 'rejected').length,
+      questionsPending: userQuestions.filter(q => q.status === 'pending').length,
+      answersGiven: userAnswers.length,
+      acceptedAnswers: userAnswers.filter(a => a.isAccepted).length,
+      totalViews: userQuestions.reduce((sum, q) => sum + (q.views || 0), 0),
+      totalVotes: userQuestions.reduce((sum, q) => sum + (q.votes || 0), 0) + 
+                  userAnswers.reduce((sum, a) => sum + (a.votes || 0), 0)
+    };
+  }
+
   async getQuestion(id: string) {
     await delay(CONFIG.MOCK_DELAY);
     
@@ -86,7 +161,21 @@ class MockApiService {
       throw new Error('Question not found');
     }
     
+    // Only show approved questions to public
+    if (question.status !== 'approved') {
+      throw new Error('Question not found');
+    }
+    
     const questionAnswers = this.answers.filter(a => a.questionId === id);
+    
+    // Increment view count (in real app, this would be tracked properly)
+    const questionIndex = this.questions.findIndex(q => q.id === id);
+    if (questionIndex !== -1) {
+      this.questions[questionIndex] = {
+        ...this.questions[questionIndex],
+        views: (this.questions[questionIndex].views || 0) + 1
+      };
+    }
     
     return {
       ...question,
@@ -113,6 +202,9 @@ class MockApiService {
       views: 0,
       votes: 0
     };
+    
+    // Add to questions array (in real app, this would be saved to database)
+    this.questions.push(newQuestion);
     
     return newQuestion;
   }

@@ -1,0 +1,84 @@
+[
+  {
+    "id": "notif_1",
+    "userId": "user_1",
+    "type": "question_approved",
+    "title": "Question Approved",
+    "message": "Your question 'How to implement JWT authentication in Go?' has been approved and is now live!",
+    "questionId": "q_1",
+    "questionTitle": "How to implement JWT authentication in Go?",
+    "createdAt": "2024-01-15T11:00:00Z",
+    "read": false
+  },
+  {
+    "id": "notif_2",
+    "userId": "user_1",
+    "type": "new_answer",
+    "title": "New Answer",
+    "message": "Admin User answered your question about JWT authentication in Go.",
+    "questionId": "q_1",
+    "questionTitle": "How to implement JWT authentication in Go?",
+    "answerId": "a_1",
+    "answerAuthor": "Admin User",
+    "createdAt": "2024-01-15T12:30:00Z",
+    "read": true
+  },
+  {
+    "id": "notif_3",
+    "userId": "user_1",
+    "type": "question_rejected",
+    "title": "Question Needs Improvement",
+    "message": "Your question 'Docker multi-stage builds for Go applications' was rejected. Reason: Question too broad. Please be more specific about your current Dockerfile and the issues you're facing.",
+    "questionId": "q_4",
+    "questionTitle": "Docker multi-stage builds for Go applications",
+    "rejectionReason": "Question too broad. Please be more specific about your current Dockerfile and the issues you're facing.",
+    "createdAt": "2024-01-13T17:30:00Z",
+    "read": true
+  },
+  {
+    "id": "notif_4",
+    "userId": "user_2",
+    "type": "question_approved",
+    "title": "Question Approved",
+    "message": "Your question 'MongoDB aggregation pipeline for complex queries' has been approved and is now live!",
+    "questionId": "q_2",
+    "questionTitle": "MongoDB aggregation pipeline for complex queries",
+    "createdAt": "2024-01-14T15:45:00Z",
+    "read": false
+  },
+  {
+    "id": "notif_5",
+    "userId": "user_2",
+    "type": "new_answer",
+    "title": "New Answer",
+    "message": "Admin User provided a detailed answer to your MongoDB aggregation question.",
+    "questionId": "q_2",
+    "questionTitle": "MongoDB aggregation pipeline for complex queries",
+    "answerId": "a_3",
+    "answerAuthor": "Admin User",
+    "createdAt": "2024-01-14T16:20:00Z",
+    "read": false
+  },
+  {
+    "id": "notif_6",
+    "userId": "user_2",
+    "type": "question_approved",
+    "title": "Question Approved",
+    "message": "Your question 'FastAPI async database operations with SQLAlchemy' has been approved!",
+    "questionId": "q_5",
+    "questionTitle": "FastAPI async database operations with SQLAlchemy",
+    "createdAt": "2024-01-12T12:00:00Z",
+    "read": true
+  },
+  {
+    "id": "notif_7",
+    "userId": "user_3",
+    "type": "question_pending",
+    "title": "Question Under Review",
+    "message": "Your question 'Next.js 14 App Router vs Pages Router' is being reviewed by our admin team.",
+    "questionId": "q_3",
+    "questionTitle": "Next.js 14 App Router vs Pages Router",
+    "createdAt": "2024-01-16T09:15:00Z",
+    "read": false
+  }
+]

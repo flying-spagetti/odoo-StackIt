@@ -14,7 +14,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import MainLayout from "@/components/layout/MainLayout";
 import useAuthStore from "@/store/authStore";
 
 export default function LoginPage() {
@@ -34,7 +33,14 @@ export default function LoginPage() {
     try {
       console.log(email, password);
       await login({ email, password });
-      router.push("/");
+      
+      // Redirect based on user role
+      const userRole = useAuthStore.getState().user?.role;
+      if (userRole === 'admin') {
+        router.push('/admin');
+      } else {
+        router.push('/dashboard');
+      }
     } catch (err) {
       setError("Invalid email or password");
     } finally {
@@ -43,17 +49,23 @@ export default function LoginPage() {
   };
 
   return (
-    <MainLayout>
-      <div className="max-w-md mx-auto mt-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        {/* Logo/Brand */}
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900">DevForum</h1>
+          <p className="mt-2 text-sm text-gray-600">Sign in to your account</p>
+        </div>
+
         <Card>
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Sign In</CardTitle>
+            <CardTitle className="text-2xl">Welcome back</CardTitle>
             <CardDescription>
               Enter your credentials to access your account
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
               {error && (
                 <Alert variant="destructive">
                   <AlertDescription>{error}</AlertDescription>
@@ -61,7 +73,7 @@ export default function LoginPage() {
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Email address</Label>
                 <Input
                   id="email"
                   type="email"
@@ -69,6 +81,7 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   required
+                  className="h-11"
                 />
               </div>
 
@@ -81,28 +94,29 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
                   required
+                  className="h-11"
                 />
               </div>
 
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Signing In..." : "Sign In"}
+              <Button type="submit" className="w-full h-11" disabled={isLoading}>
+                {isLoading ? "Signing in..." : "Sign in"}
               </Button>
             </form>
 
-            <div className="mt-6 text-center text-sm">
-              <span className="text-muted-foreground">
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600">
                 Don't have an account?{" "}
-              </span>
-              <Link
-                href="/auth/signup"
-                className="text-primary hover:underline"
-              >
-                Sign up
-              </Link>
+                <Link
+                  href="/auth/signup"
+                  className="font-medium text-blue-600 hover:text-blue-500"
+                >
+                  Sign up
+                </Link>
+              </p>
             </div>
           </CardContent>
         </Card>
       </div>
-    </MainLayout>
+    </div>
   );
 }
